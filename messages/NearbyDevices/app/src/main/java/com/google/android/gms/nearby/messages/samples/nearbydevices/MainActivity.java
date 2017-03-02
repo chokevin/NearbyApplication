@@ -1,6 +1,8 @@
 package com.google.android.gms.nearby.messages.samples.nearbydevices;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,9 +12,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -31,10 +33,11 @@ import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeCallback;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.UUID;
+import java.lang.Object;
 
 /**
  * An activity that allows a user to publish device information, and receive information about
@@ -111,12 +114,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * Adapter for working with messages from nearby publishers.
      */
     private ArrayAdapter<String> mNearbyDevicesArrayAdapter;
+    private String[] URLarray = new String[20];
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mSubscribeSwitch = (SwitchCompat) findViewById(R.id.subscribe_switch);
         mPublishSwitch = (SwitchCompat) findViewById(R.id.publish_switch);
 
@@ -131,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 // Called when a new message is found.
                 mNearbyDevicesArrayAdapter.add(
                         DeviceMessage.fromNearbyMessage(message).getMessageBody());
+                URLarray[count] = DeviceMessage.fromNearbyMessage(message).getmURL();
+                count++;
             }
 
             @Override
@@ -138,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 // Called when a message is no longer detectable nearby.
                 mNearbyDevicesArrayAdapter.remove(
                         DeviceMessage.fromNearbyMessage(message).getMessageBody());
+                // TODO: delete url from string array properly
             }
         };
 
@@ -182,6 +189,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (nearbyDevicesListView != null) {
             nearbyDevicesListView.setAdapter(mNearbyDevicesArrayAdapter);
         }
+
+        nearbyDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLarray[position]));
+                startActivity(browserIntent);
+            }
+        });
+
         buildGoogleApiClient();
     }
 

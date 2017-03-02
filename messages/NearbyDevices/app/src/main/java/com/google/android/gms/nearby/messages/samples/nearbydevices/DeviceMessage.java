@@ -17,6 +17,7 @@ public class DeviceMessage {
 
     private final String mUUID;
     private final String mMessageBody;
+    private final String mURL;
 
     /**
      * Builds a new {@link Message} object using a unique identifier.
@@ -39,11 +40,12 @@ public class DeviceMessage {
 
     private DeviceMessage(String uuid) {
         mUUID = uuid;
-        mMessageBody = Build.MODEL;
-        // TODO(developer): add other fields that must be included in the Nearby Message payload.
+        mMessageBody = "Please visit us by clicking here!";
+        mURL = "http://ambientdynamix.org/";
     }
 
     protected String getMessageBody() {
         return mMessageBody;
     }
+    protected String getmURL() { return mURL; }
 }
