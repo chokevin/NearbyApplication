@@ -18,16 +18,19 @@
             android:value="AIzaSyDeSIc2AeeMQNb73wBSfW9gX6W1fpiC5Hs" />
 
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".FormActivity"></activity>
+
+        <activity android:name=".FormActivity">
+            <category android:name="android.intent.category.DEFAULT"/>
+        </activity>
     </application>
 
 </manifest>
